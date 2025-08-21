@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">تایید نهایی</h1>
+            <p class="lead fw-normal text-white-50 mb-0">همه چیز را تایید میکنید ؟</p>
+        </div>
+    </div>
+</header>
+<br>
+<div class="container">
+    <div class="row">
+        <center>
+            <div class="col-10">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>خلاصه سفارشات شما</strong>
+                    </div>
+                    <div class="card-body">
+                     {% for product in cart_products %}
+                        {{ product.name }} <br>
+                        <small>
+                            قیمت:
+                            {% if product.is_sale %}
+                               {{ product.sale_price | intcomma }}
+                            {% else %}
+                               {{ product.price | intcomma }}
+                            {% endif %}
+                        </small> <br>
+                        <small>
+                            تعداد:
+                            {% for key,value in quantities.items %}
+                               {% if key == product.id|slugify %}
+                                  {{ value }}
+                               {% endif %}
+                            {% endfor %}
+                        </small> <br>
+                        <hr>
+                     {% endfor %}
+                     <br>
+                     <strong>مجموع قیمت سفارشات شما: {{ total | intcomma }}</strong> 
+                     <br><br>
+                    </div>
+                </div>
+                <br>
+                <div class="card">
+                    <div class="card-header">
+                        <strong>مشخصات ارسال</strong>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{% url 'process_order' %}">
+                        {% csrf_token %}
+                        <table class="table table-bordered text-center">
+                            <tr>
+                                <th>نام و نام خانوادگی</th>
+                                <td>{{ shipping_info.shipping_full_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>ایمیل</th>
+                                <td>{{ shipping_info.shipping_email }}</td>
+                            </tr>
+                            <tr>
+                                <th>آدرس 1</th>
+                                <td>{{ shipping_info.shipping_address1 }}</td>
+                            </tr>
+                            <tr>
+                                <th>آدرس 2</th>
+                                <td>{{ shipping_info.shipping_address2 }}</td>
+                            </tr>
+                            <tr>
+                                <th>شهر</th>
+                                <td>{{ shipping_info.shipping_city }}</td>
+                            </tr>
+                            <tr>
+                                <th>منطقه</th>
+                                <td>{{ shipping_info.shipping_state }}</td>
+                            </tr>
+                            <tr>
+                                <th>کد پستی</th>
+                                <td>{{ shipping_info.shipping_zipcode }}</td>
+                            </tr>
+                            <tr>
+                                <th>کشور</th>
+                                <td>{{ shipping_info.shipping_country }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-success">ثبت سفارش و پرداخت</button>
+            </form>
+        </center>
+    </div>
+</div>
+<br><br><br><br><br><br><br>
+{% endblock %}

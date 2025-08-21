@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+<br><br>
+<div class="container">
+    <div class="card mb-3">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{ product.picture.url }}" class="img-fluid rounded-start" alt="...">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="card-text">{{ product.description }}</p>
+              {% if product.is_sale %}
+              <p class="card-text">قیمت : <strike>{{ product.price|intcomma }}</strike> - {{ product.sale_price|intcomma }}</p>
+              {% else %}
+              <p class="card-text">قیمت : {{ product.price|intcomma }}</p>
+              {% endif %}
+              تعداد:
+              <select class="form-select" id="cart-qty">
+               <option value="1">1</option>
+               <option value="2">2</option>
+               <option value="3">3</option>
+               <option value="3">4</option>
+              </select>
+              <br><br>
+              <button class='btn btn-secondary' type='button' value='{{ product.id }}' id='add-cart'>افزودن به سبد خرید</button>
+              <a href="{% url 'home' %}" class="btn btn-secondary">بازگشت به صفحه اصلی</a>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+<br><br><br><br><br><br><br><br><br><br>
+<script>
+  $(document).on('click', '#add-cart', function(e){
+    e.preventDefault();
+    $.ajax({
+      type:'POST',
+      url: '{% url "cart_add" %}',
+      data:{
+        product_id: $('#add-cart').val(),
+        product_qty: $('#cart-qty option:selected').text(),
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+        action: 'post'
+      },
+
+      success: function(json){
+        //console.log(json)
+        document.getElementById("cart_quantity").textContent = json.qty
+        location.reload()
+      },
+      error: function(xhr, errmsg, err){  
+      }
+    })
+  })
+</script>
+{% endblock %}

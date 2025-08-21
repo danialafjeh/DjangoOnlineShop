@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<br><br>
+<div class="container">
+    <div class="row">
+        <center>
+            <div class="col-10">
+                {% if other %}
+                <h3>سفارشات جاری</h3>
+                <table class="table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">شماره سفارش</th>
+                            <th scope="col">به نام</th>
+                            <th scope="col">تاریخ ثبت سفارش</th>
+                            <th scope="col">وضعیت</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in other %}
+                        <tr>
+                            <th scope="row"><a href="{% url 'orders_details' order.id %}">سفارش شماره {{ order.id }}</a></th>
+                            <td>{{ order.full_name }}</td>
+                            <td>{{ order.date_ordered|date:"y-m-d h:i:s" }}</td>
+                            <td>{{ order.get_status_display }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <h3>سفارشات جاری ای وجود ندارد.</h3>
+                {% endif %}
+                <br>
+                <hr>
+                <br>
+                {% if delivered %}
+                <h3>سفارشات تحویل داده شده</h3>
+                <table class="table">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">شماره سفارش</th>
+                            <th scope="col">به نام</th>
+                            <th scope="col">تاریخ تحویل</th>
+                            <th scope="col">وضعیت</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in delivered %}
+                        <tr>
+                            <th scope="row"><a href="{% url 'orders_details' order.id %}">سفارش شماره {{ order.id }}</a></th>
+                            <td>{{ order.full_name }}</td>
+                            <td>{{ order.last_update|date:"y-m-d h:i:s" }}</td>
+                            <td>{{ order.get_status_display }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <h3>سفارش تحویل داده شده ای وجود ندارد.</h3>
+                {% endif %}
+            </div>
+        </center>
+    </div>
+</div>
+<br><br><br><br>
+{% endblock %}

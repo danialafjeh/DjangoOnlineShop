@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">دسته بندی محصولات</h1>
+            <p class="lead fw-normal text-white-50 mb-0">تمام دسته بندی های فروشگاه رو اینجا ببینید!</p>
+        </div>
+    </div>
+</header>
+<br><br>
+<div class="container">
+    <div class="row">
+        <center>
+            <div class="col-10">
+                <p align="justify">
+                    {% for cat in category %}
+                      <a href="{% url 'category' cat.name %}"><h3>{{ cat.name }}</h3></a>
+                    {% endfor %}
+                </p>
+            </div>
+        </center>
+    </div>
+</div>
+<br><br>
+{% endblock %}
